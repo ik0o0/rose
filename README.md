@@ -1,15 +1,34 @@
-# rose-file-storage
+# Rose — Proof of Concept  
+*A lightweight and modular file storage server*
 
-To install dependencies:
+---
 
-```bash
-bun install
-```
+**Rose** is a work-in-progress: a file storage system focused on clarity, simplicity, and adaptability.
 
-To run:
+This **proof of concept** serves to explore and test key architecture choices.
 
-```bash
-bun run index.ts
-```
+### Technologies used
 
-This project was created using `bun init` in bun v1.2.9. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- Bun  
+- TypeScript  
+- Express  
+- TypeORM  
+- SQLite  
+- JWT (authentication)
+
+---
+
+## Looking ahead
+
+Rose is being designed to support a variety of use cases, from minimal local setups to more advanced, privacy-respecting deployments.
+
+Planned directions include:
+
+- Server-side only (no JavaScript), privacy-first variants  
+- A unified CLI for installation and configuration  
+- Modular builds (lightweight, corporate, privacy-oriented)  
+- Native reimplementation
+
+---
+
+*This is only the beginning. Rose will grow thoughtfully, step by step.*
