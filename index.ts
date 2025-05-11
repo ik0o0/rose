@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 import express from "express"
+import cors from "cors"
 import { initializeDatabase } from "./datasource/datasource"
 import { UserController } from "./controllers/UserController"
 import { FileController } from "./controllers/FileController"
@@ -13,8 +14,13 @@ async function bootstrap() {
 
     const app = express()
     const PORT = process.env.PORT
+    const HOST = process.env.HOST
+    const CORS_ORIGIN = process.env.CORS_ORIGIN
+
+    app.use(cors({ origin: CORS_ORIGIN }))
 
     app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
     
     const userController = new UserController()
     const fileController = new FileController()
@@ -23,13 +29,16 @@ async function bootstrap() {
     app.post("/register", userController.register)
     app.post("/login", userController.login)
 
+    // Metadatas file endpoints
+    app.get("/infos/files", authMiddleware, fileController.getAllMetadatas)
+    app.get("/infos/files/:id", authMiddleware, fileController.getDatasById)
+
     // File endpoints
-    app.get("/files", authMiddleware, fileController.getAllFiles)
     app.get("/files/:id", authMiddleware, fileController.getFileById)
     app.post("/upload", authMiddleware, upload.single("file"), fileController.uploadFile)
 
-    app.listen(PORT, () => {
-        console.log(`Listening on http://127.0.0.1:${PORT}`)
+    app.listen(PORT, HOST, () => {
+        console.log(`Listening on http://${HOST}:${PORT}`)
     })
 }
 
