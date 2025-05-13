@@ -63,4 +63,29 @@ export class UserController {
             })
         }
     }
+
+    profile = async (req: Request, res: Response) => {
+        try {
+            const userId: number = req.user.id
+            if (!userId) {
+                return res.status(401).json({
+                    message: "Unauthorized access, you must be authenticated."
+                })
+            }
+
+            const user = await this.userService.findById(userId)
+            if (!user) {
+                return res.status(404).json({
+                    message: "User not found."
+                })
+            }
+
+            return res.status(200).json(user)
+        } catch (err: any) {
+            return res.status(500).json({
+                message: "Error when getting the profile.",
+                error: err.message
+            })
+        }
+    }
 }

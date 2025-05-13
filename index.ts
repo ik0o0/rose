@@ -28,6 +28,7 @@ async function bootstrap() {
     // User endpoints
     app.post("/register", userController.register)
     app.post("/login", userController.login)
+    app.get("/profile", authMiddleware, userController.profile)
 
     // Metadatas file endpoints
     app.get("/infos/files", authMiddleware, fileController.getAllMetadatas)
