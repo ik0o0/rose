@@ -1,9 +1,4 @@
-import {
-    IsInt,
-    IsNotEmpty,
-    IsOptional,
-    Min
-} from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, Min } from "class-validator"
 import {
     Entity,
     PrimaryGeneratedColumn,
@@ -11,38 +6,37 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     ManyToOne,
-    JoinColumn
-} from "typeorm";
-import { User } from "./User";
+    JoinColumn,
+} from "typeorm"
+import { User } from "./User"
 
 @Entity()
 export class File {
-
     @PrimaryGeneratedColumn()
     id!: number
 
     @Column({
         nullable: false,
-        unique: true
+        unique: true,
     })
     @IsNotEmpty({ message: "Path cannot be empty." })
     path!: string
 
     @Column({
-        nullable: false
+        nullable: false,
     })
     @IsNotEmpty({ message: "File name cannot be empty." })
     filename!: string
 
     @Column({
-        nullable: true
+        nullable: true,
     })
-    @IsOptional()   
+    @IsOptional()
     mime_type!: string
 
     @Column({
         nullable: true,
-        type: "int"
+        type: "int",
     })
     @IsOptional()
     @IsInt({ message: "The size must be an integer." })
@@ -50,7 +44,7 @@ export class File {
     size!: number
 
     @Column({
-        nullable: false
+        nullable: false,
     })
     user_id!: number
 

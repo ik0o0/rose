@@ -1,32 +1,38 @@
-import dotenv from "dotenv"
-dotenv.config()
-
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express"
 import * as jwt from "jsonwebtoken"
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-    if (!process.env.JWT_SECRET) {
-        return res.status(500).json({
-            message: "Internal server error (environnement error), please contact the system administrator."
+export function authMiddleware(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
+    const jwtSecret = process.env.JWT_SECRET
+    if (!jwtSecret) {
+        res.status(500).json({
+            message:
+                "Internal server error (environnement error), please contact the system administrator.",
         })
+        return
     }
 
     const authHeader = req.headers["authorization"]
     const token = authHeader && authHeader.split(" ")[1]
 
     if (!token) {
-        return res.status(401).json({
-            message: "Access unauthorized."
+        res.status(401).json({
+            message: "Access unauthorized.",
         })
+        return
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const decoded = jwt.verify(token, jwtSecret)
         req.user = decoded
         next()
     } catch (err) {
-        return res.status(403).json({
-            message: "Invalid token."
+        res.status(403).json({
+            message: "Invalid token.",
         })
+        return
     }
 }

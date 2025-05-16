@@ -1,108 +1,127 @@
-import { FileService } from "../services/FileService";
-import type { Request, Response } from "express";
-import { File } from "../entities/File";
+import { FileService } from "../services/FileService"
+import type { Request, Response } from "express"
+import { File } from "../entities/File"
 import { existsSync } from "fs"
 
 export class FileController {
-
+    
     private fileService = new FileService()
 
-    getAllMetadatas = async (req: Request, res: Response) => {
+    getAllMetadatas = async (req: Request, res: Response): Promise<void> => {
         try {
             const userId = req.user.id
             if (!userId) {
-                return res.status(401).json({
-                    message: "Unauthorized access, you must be authenticated."
+                res.status(401).json({
+                    message: "Unauthorized access, you must be authenticated.",
                 })
+                return
             }
 
-            const files: File[] = await this.fileService.findAllMetadatas(userId)
+            const files: File[] =
+                await this.fileService.findAllMetadatas(userId)
 
-            return res.status(200).json(files)
+            res.status(200).json(files)
+            return
         } catch (err: any) {
-            return res.status(500).json({
+            res.status(500).json({
                 message: "Error when getting metadatas files.",
-                error: err.message
+                error: err.message,
             })
+            return
         }
     }
 
-    getDatasById = async (req: Request, res: Response) => {
+    getDatasById = async (req: Request, res: Response): Promise<void> => {
         try {
-            const {id} = req.params
+            const { id } = req.params
             const integerId: number = parseInt(id!)
             const userId = req.user.id
 
             if (!userId) {
-                return res.status(401).json({
-                    message: "Unauthorized access, you must be authenticated."
+                res.status(401).json({
+                    message: "Unauthorized access, you must be authenticated.",
                 })
+                return
             }
+
+            const file: File | null =
+                await this.fileService.findDatasById(integerId, userId,)
             
-            const file: File | null = await this.fileService.findDatasById(integerId, userId)
             if (!file) {
-                return res.status(404).json({
-                    message: "File not found."
+                res.status(404).json({
+                    message: "File not found.",
                 })
+                return
             }
 
-            return res.status(200).json(file)
+            res.status(200).json(file)
+            return
         } catch (err: any) {
-            return res.status(500).json({
+            res.status(500).json({
                 message: "Error when getting metadatas of a file.",
-                error: err.message
+                error: err.message,
             })
+            return
         }
     }
 
-    getFileById = async (req: Request, res: Response) => {
+    getFileById = async (req: Request, res: Response): Promise<void> => {
         try {
-            const {id} = req.params
+            const { id } = req.params
             const integerId: number = parseInt(id!)
             const userId = req.user.id
 
             if (!userId) {
-                return res.status(401).json({
-                    message: "Unauthorized access, you must be authenticated."
+                res.status(401).json({
+                    message: "Unauthorized access, you must be authenticated.",
                 })
+                return
             }
 
-            const fileMetadata: File | null = await this.fileService.findDatasById(integerId, userId)
+            const fileMetadata: File | null =
+                await this.fileService.findDatasById(integerId, userId)
+
             if (!fileMetadata) {
-                return res.status(404).json({
-                    message: "File not found."
+                res.status(404).json({
+                    message: "File not found.",
                 })
+                return
             }
 
             const path = fileMetadata.path
             if (!existsSync(path)) {
-                return res.status(404).json({
-                    message: "File not found on the disk."
+                res.status(404).json({
+                    message: "File not found on the disk.",
                 })
+                return
             }
 
-            return res.status(200).sendFile(path)
+            res.status(200).sendFile(path)
+            return
         } catch (err: any) {
-            return res.status(500).json({
+            res.status(500).json({
                 message: "Error when getting a file.",
-                error: err.message
+                error: err.message,
             })
+            return
         }
     }
 
-    uploadFile = async (req: Request, res: Response) => {
+    uploadFile = async (req: Request, res: Response): Promise<void> => {
         try {
             const userId = req.user.id
             if (!userId) {
-                return res.status(401).json({
-                    message: "Access unauthorized (you must be authenticated)."
+                res.status(401).json({
+                    message: "Access unauthorized (you must be authenticated).",
                 })
+                return
             }
 
             if (!req.file) {
-                return res.status(400).json({
-                    message: "No file uploaded."
+                res.status(400).json({
+                    message: "No file uploaded.",
                 })
+                return
             }
 
             const file = await this.fileService.createFile(
@@ -110,17 +129,20 @@ export class FileController {
                 req.file.filename,
                 req.file.mimetype,
                 req.file.size,
-                userId)
-        
-            return res.status(200).json({
+                userId,
+            )
+
+            res.status(200).json({
                 message: "File uploaded with success.",
-                file: file
+                file: file,
             })
+            return
         } catch (err: any) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: "Error when uploading the file.",
-                error: err.message
+                error: err.message,
             })
+            return
         }
     }
 }

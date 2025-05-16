@@ -4,33 +4,31 @@ import {
     CreateDateColumn,
     Entity,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from "typeorm";
-import {
-    IsNotEmpty,
-    Length
-} from "class-validator";
+    UpdateDateColumn,
+} from "typeorm"
+import { IsNotEmpty, Length } from "class-validator"
 import * as bcrypt from "bcrypt"
 
 @Entity()
 export class User {
-    
     @PrimaryGeneratedColumn()
     id!: number
 
     @Column({
         unique: true,
         nullable: false,
-        length: 50
+        length: 50,
     })
     @IsNotEmpty({ message: "Username cannot be empty." })
     username!: string
 
     @Column({
-        nullable: false
+        nullable: false,
     })
     @IsNotEmpty({ message: "Password cannot be empty." })
-    @Length(6, 100, { message: "The password must be between 6 and 100 caracters." })
+    @Length(6, 100, {
+        message: "The password must be between 6 and 100 caracters.",
+    })
     password!: string
 
     @CreateDateColumn()

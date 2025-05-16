@@ -15,13 +15,14 @@ async function bootstrap() {
     const app = express()
     const PORT = process.env.PORT
     const HOST = process.env.HOST
+    const INT_PORT = parseInt(PORT!)
     const CORS_ORIGIN = process.env.CORS_ORIGIN
 
     app.use(cors({ origin: CORS_ORIGIN }))
 
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
-    
+
     const userController = new UserController()
     const fileController = new FileController()
 
@@ -36,9 +37,14 @@ async function bootstrap() {
 
     // File endpoints
     app.get("/files/:id", authMiddleware, fileController.getFileById)
-    app.post("/upload", authMiddleware, upload.single("file"), fileController.uploadFile)
+    app.post(
+        "/upload",
+        authMiddleware,
+        upload.single("file"),
+        fileController.uploadFile,
+    )
 
-    app.listen(PORT, HOST, () => {
+    app.listen(INT_PORT, HOST!, () => {
         console.log(`Listening on http://${HOST}:${PORT}`)
     })
 }

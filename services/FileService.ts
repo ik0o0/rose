@@ -1,17 +1,17 @@
 import dotenv from "dotenv"
 dotenv.config()
 
-import { promisify } from "util";
-import { AppDataSource } from "../datasource/datasource";
-import { File } from "../entities/File";
-import * as fs from "fs";
-import * as path from "path";
-import { validate } from "class-validator";
+import { promisify } from "util"
+import { AppDataSource } from "../datasource/datasource"
+import { File } from "../entities/File"
+import * as fs from "fs"
+import * as path from "path"
+import { validate } from "class-validator"
 
 const writeFile = promisify(fs.writeFile)
 
 export class FileService {
-
+    
     private fileRepository = AppDataSource.getRepository(File)
     private readonly uploadDir = process.env.UPLOAD_DIR || "/var/data"
 
@@ -20,7 +20,7 @@ export class FileService {
     }
 
     async findDatasById(id: number, userId: number): Promise<File | null> {
-        return this.fileRepository.findOneBy({ id: id, user_id: userId})
+        return this.fileRepository.findOneBy({ id: id, user_id: userId })
     }
 
     async createFile(
@@ -28,7 +28,7 @@ export class FileService {
         filename: string,
         mimeType: string,
         size: number,
-        userId: number
+        userId: number,
     ): Promise<File> {
         const file = new File()
         file.path = path
@@ -39,7 +39,9 @@ export class FileService {
 
         const errors = await validate(file)
         if (errors.length > 0) {
-            throw new Error(`Validation failed: ${errors.map(e => Object.values(e.constraints || {}).join(', ')).join(', ')}`)
+            throw new Error(
+                `Validation failed: ${errors.map((e) => Object.values(e.constraints || {}).join(", ")).join(", ")}`,
+            )
         }
 
         return this.fileRepository.save(file)
