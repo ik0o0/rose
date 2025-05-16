@@ -14,11 +14,11 @@ const storage = multer.diskStorage({
     },
 })
 
-const fileFilter = (
+function fileFilter(
     req: Express.Request,
     file: Express.Multer.File,
     cb: multer.FileFilterCallback,
-) => {
+) {
     const allowedMimeTypes = [
         "image/jpeg",
         "image/png",
