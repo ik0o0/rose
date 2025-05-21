@@ -2,10 +2,10 @@ import multer from "multer"
 import * as path from "path"
 
 const storage = multer.diskStorage({
-    destination: (req: Express.Request, file: Express.Multer.File, cb) => {
+    destination(req: Express.Request, file: Express.Multer.File, cb) {
         cb(null, process.env.UPLOAD_DIR || "/var/data")
     },
-    filename: (req: Express.Request, file: Express.Multer.File, cb) => {
+    filename(req: Express.Request, file: Express.Multer.File, cb) {
         const ext = path.extname(file.originalname)
         const baseName = path.basename(file.originalname, ext)
         const safeName = baseName.replace(/\s+/g, "_")
