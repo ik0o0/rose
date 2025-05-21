@@ -5,7 +5,7 @@ export class UserController {
 
     private userService = new UserService()
 
-    async register(req: Request, res: Response): Promise<void> {
+    register = async (req: Request, res: Response): Promise<void> => {
         try {
             const { username, password } = req.body
 
@@ -25,7 +25,7 @@ export class UserController {
         }
     }
 
-    async login(req: Request, res: Response): Promise<void> {
+    login = async (req: Request, res: Response): Promise<void> => {
         try {
             const { username, password } = req.body
 
@@ -77,7 +77,7 @@ export class UserController {
         }
     }
 
-    async profile(req: Request, res: Response): Promise<void> {
+    profile = async (req: Request, res: Response): Promise<void> => {
         try {
             const userId: number = req.user.id
             if (!userId) {

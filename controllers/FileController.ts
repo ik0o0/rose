@@ -7,7 +7,7 @@ export class FileController {
     
     private fileService = new FileService()
 
-    async getAllMetadatas(req: Request, res: Response): Promise<void> {
+    getAllMetadatas = async (req: Request, res: Response): Promise<void> => {
         try {
             const userId = req.user.id
             if (!userId) {
@@ -31,7 +31,7 @@ export class FileController {
         }
     }
 
-    async getDatasById(req: Request, res: Response): Promise<void> {
+    getDatasById = async (req: Request, res: Response): Promise<void> => {
         try {
             const { id } = req.params
             const integerId: number = parseInt(id!)
@@ -65,7 +65,7 @@ export class FileController {
         }
     }
 
-    async getFileById(req: Request, res: Response): Promise<void> {
+    getFileById = async (req: Request, res: Response): Promise<void> => {
         try {
             const { id } = req.params
             const integerId: number = parseInt(id!)
@@ -107,7 +107,7 @@ export class FileController {
         }
     }
 
-    async uploadFile(req: Request, res: Response): Promise<void> {
+    uploadFile = async (req: Request, res: Response): Promise<void> => {
         try {
             const userId = req.user.id
             if (!userId) {
